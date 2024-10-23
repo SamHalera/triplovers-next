@@ -12,6 +12,7 @@ type PublicPageType = {
   slug: string;
   navigationType: string;
   isHomePage: boolean;
+  priority: number;
 };
 
 type RoomType = {
