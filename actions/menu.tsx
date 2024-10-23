@@ -17,7 +17,6 @@ export const getMenuItems = async () => {
     const mainMenu: MenuType = data
       .sort((a: PublicPageType, b: PublicPageType) => a.priority - b.priority)
       .map((item: PublicPageType) => {
-        console.log(item);
         return {
           label: item.title,
           path: item.isHomePage ? "" : item.slug,
