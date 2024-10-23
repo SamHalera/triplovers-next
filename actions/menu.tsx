@@ -14,12 +14,15 @@ export const getMenuItems = async () => {
 
     const { data } = await response.json();
 
-    const mainMenu: MenuType = data.map((item: PublicPageType) => {
-      return {
-        label: item.title,
-        path: item.isHomePage ? "" : item.slug,
-      };
-    });
+    const mainMenu: MenuType = data
+      .sort((a: PublicPageType, b: PublicPageType) => a.priority - b.priority)
+      .map((item: PublicPageType) => {
+        console.log(item);
+        return {
+          label: item.title,
+          path: item.isHomePage ? "" : item.slug,
+        };
+      });
 
     return mainMenu;
   } catch (error) {
