@@ -2,6 +2,7 @@ import { cn } from "@/lib/cn";
 import { slugify } from "@/lib/slugify";
 import { BedSingle, UserRound } from "lucide-react";
 import Link from "next/link";
+import { it } from "node:test";
 import React from "react";
 
 const RoomItem = ({ item }: { item: RoomType }) => {
@@ -24,14 +25,18 @@ const RoomItem = ({ item }: { item: RoomType }) => {
       </span>
       <div className=" overflow-hidden">
         <div
-          className="bg-cover bg-center w-52 h-52 flex flex-col p-2 duration-700 group-hover:scale-110"
+          className="bg-cover bg-center w-full h-60 flex flex-col p-2 duration-700 group-hover:scale-110"
           style={{
             backgroundImage: `url(${process.env.STRAPI_API_URL}${item.image.url})`,
           }}
         ></div>
       </div>
       <div className="p-5 flex flex-col gap-4">
-        <h2>{item.name}</h2>
+        <h2 className="text-primary">
+          <span className="font-semibold">{item.name}</span> -{" "}
+          {item.subtitle ?? ""}
+        </h2>
+
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1">
             <BedSingle /> {item.nbBeds}
