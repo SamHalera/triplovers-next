@@ -1,70 +1,81 @@
 "use client";
-import { MinusCircle, PlusCircle } from "lucide-react";
+
 import { useEffect, useState } from "react";
 
+import { DateRange } from "react-day-picker";
+import { addDays, format, formatDistanceStrict } from "date-fns";
+import BookingRequestForm from "./BookingRequestForm";
+
 export const ReservationWidget = ({
-  roomPrice,
-  currency,
+  data,
   isAvailable,
+
+  path,
+  children,
 }: {
-  roomPrice: string;
-  currency: string;
+  data: RoomType;
   isAvailable: boolean;
+
+  path?: string;
+  children?: React.ReactNode;
 }) => {
-  const [priceState, setPrice] = useState<number>(parseFloat(roomPrice));
+  const [formIsSubmitted, setFormIsSubmitted] = useState<boolean>(false);
+  const [priceState, setPrice] = useState<number>(parseFloat(data.price));
   const [nbNightsState, setNbNightsState] = useState<number>(1);
-  const [totalState, setTotalState] = useState<number>(0);
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: addDays(new Date(), 1),
+  });
+
   const cleaningFee = 20;
   const taxes = 16;
+  const dateFrom = date?.from ? date.from : new Date();
+  const dateTo = date?.to ? date.to : addDays(new Date(), 1);
+  const datesDistance = formatDistanceStrict(dateFrom, dateTo, {
+    unit: "day",
+  }).replace(/[a-z]/g, "");
 
+  const [totalState, setTotalState] = useState<number>(
+    priceState * parseFloat(datesDistance) + cleaningFee + taxes
+  );
   useEffect(() => {
-    setTotalState(priceState * nbNightsState + cleaningFee + taxes);
-  }, [nbNightsState]);
+    setTotalState(priceState * parseFloat(datesDistance) + cleaningFee + taxes);
+  }, [date]);
   return (
     <div className="shadow-sm rounded-md sticky border border-default w-[500px]  top-40 h-96 p-6">
-      <div className="">
-        <span className="text-2xl text-primary font-semibold mb-8 block">
-          {parseFloat(roomPrice).toFixed(2) ?? "0.00"} night
-        </span>
+      <div className="flex flex-col gap-6">
+        {!formIsSubmitted && path ? (
+          <BookingRequestForm
+            roomPrice={data.price}
+            date={date}
+            setDate={setDate}
+            path={path}
+            setFormIsSubmitted={setFormIsSubmitted}
+          />
+        ) : (
+          children
+        )}
 
-        <div className="text-primary flex  gap-5 px-6 py-2 border border-primary justify-self-start rounded-full mb-4">
-          <PlusCircle
-            onClick={() => {
-              setNbNightsState((prev) => prev + 1);
-            }}
-          />
-          <MinusCircle
-            onClick={() => {
-              setNbNightsState((prev) => {
-                if (prev === 1) {
-                  return 1;
-                } else {
-                  return prev - 1;
-                }
-              });
-            }}
-          />
-        </div>
         <div className="flex flex-col gap-6">
           <div className="flex justify-between">
             <span>
-              {parseFloat(roomPrice).toFixed(2)} {currency} x {nbNightsState}{" "}
-              night{nbNightsState > 1 && "s"}
+              {parseFloat(data.price).toFixed(2)} {data.currency} x{" "}
+              {datesDistance} night{nbNightsState > 1 && "s"}
             </span>
             <span>
-              {parseFloat(roomPrice).toFixed(2)} {currency}
+              {parseFloat(data.price).toFixed(2)} {data.currency}
             </span>
           </div>
           <div className="flex justify-between">
             <span>Cleaning fee</span>
             <span>
-              {cleaningFee} {currency}
+              {cleaningFee} {data.currency}
             </span>
           </div>
           <div className="flex justify-between">
             <span>Taxes</span>
             <span>
-              {taxes} {currency}
+              {taxes} {data.currency}
             </span>
           </div>
           <hr></hr>
@@ -77,5 +88,3 @@ export const ReservationWidget = ({
     </div>
   );
 };
-
-// export default ReservationWidget;

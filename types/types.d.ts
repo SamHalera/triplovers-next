@@ -19,6 +19,7 @@ type RoomType = {
   id: number;
   documentId: string;
   name: string;
+  subtitle: string;
   nbPeople: number;
   nbBeds: number;
   isAvailable: boolean;

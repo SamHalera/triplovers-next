@@ -9,6 +9,7 @@ export const getMenuItems = async () => {
           "Content-type": "application/json",
           Authorization: `Bearer ${process.env.STRAPI_BEARER_TOKEN}`,
         },
+        cache: "no-cache",
       }
     );
 
