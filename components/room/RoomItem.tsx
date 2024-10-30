@@ -9,7 +9,7 @@ const RoomItem = ({ item }: { item: RoomType }) => {
   const slug = slugify(item.name);
   return (
     <Link
-      href={`/our-rooms/${slug}`}
+      href={`/rooms/${slug}`}
       className="border border-default shadow-sm flex flex-col gap-4  rounded-md duration-500 group relative"
     >
       <span
