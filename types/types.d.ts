@@ -48,3 +48,10 @@ type Media = {
   createdAt: string;
   updatedAt: string;
 };
+
+type ErrorType = {
+  error: {
+    message: string;
+    status: number;
+  };
+};

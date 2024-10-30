@@ -26,19 +26,25 @@ export const ReservationWidget = ({
     from: new Date(),
     to: addDays(new Date(), 1),
   });
-
+  const [datesDistance, setDateDistance] = useState<string>("1");
   const cleaningFee = 20;
   const taxes = 16;
-  const dateFrom = date?.from ? date.from : new Date();
-  const dateTo = date?.to ? date.to : addDays(new Date(), 1);
-  const datesDistance = formatDistanceStrict(dateFrom, dateTo, {
-    unit: "day",
-  }).replace(/[a-z]/g, "");
 
   const [totalState, setTotalState] = useState<number>(
     priceState * parseFloat(datesDistance) + cleaningFee + taxes
   );
+
   useEffect(() => {
+    const dateFrom = date?.from ? date.from : new Date();
+    const dateTo = date?.to ? date.to : addDays(dateFrom, 1);
+    const distance = formatDistanceStrict(dateFrom, dateTo, {
+      unit: "day",
+    }).replace(/[a-z]/g, "");
+    const computedDistance = parseFloat(distance) + 1;
+    console.log("dateFrom==>", dateFrom);
+    console.log("dateTo==>", dateTo);
+    console.log("distance==>", distance);
+    setDateDistance(distance);
     setTotalState(priceState * parseFloat(datesDistance) + cleaningFee + taxes);
   }, [date]);
   return (
