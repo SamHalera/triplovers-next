@@ -2,6 +2,7 @@
 
 export const getMenuItems = async () => {
   try {
+    console.log(process.env.STRAPI_API_URL);
     const response = await fetch(
       `${process.env.STRAPI_API_URL}/api/public-pages?filters[navigationType][$eq]=main`,
       {
@@ -12,6 +13,7 @@ export const getMenuItems = async () => {
         cache: "no-cache",
       }
     );
+    console.log("hello getting menu");
 
     const { data } = await response.json();
 
